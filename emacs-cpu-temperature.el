@@ -33,8 +33,8 @@
                             (buffer-string)))
         (setq cpu-temperature--termal-zone zone)))))
 
-(defun cpu-temperature-termal-zone-temp ()
-  "Get CPU temperature for the current thermal zone."
+(defun cpu-temperature-update ()
+  "Update CPU temperature for the current thermal zone."
   (setq cpu-temperature-string
         (format "%d°C "
                 (/ (string-to-number (with-temp-buffer
@@ -52,8 +52,8 @@
         (cpu-temperature-set-termal-zone)
 	(setq cpu-temperature--timer
 	      (run-at-time t cpu-temperature-update-interval
-			   'cpu-temperature-termal-zone-temp))
-	(cpu-temperature-termal-zone-temp))))
+			   'cpu-temperature-update))
+	(cpu-temperature-update))))
 
 (provide 'emacs-cpu-temperature)
 
