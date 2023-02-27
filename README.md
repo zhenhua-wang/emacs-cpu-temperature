@@ -8,10 +8,13 @@ Currently, it only supports linux system
   (setq cpu-temperature-update-interval 1
         cpu-temperature-termal-zone-type "x86_pkg_temp"
         cpu-temperature-termal-zone-path "/sys/class/thermal/")
-  (add-to-list 'global-mode-string 'cpu-temperature-string t)
   (cpu-temperature-mode 1))
 ```
 
-# example
+# Usage
+To show it on mode-line or tab-bar, you can simple append the variable `cpu-temperature-string` to `global-mode-string`.
+```elisp
+(add-to-list 'global-mode-string 'cpu-temperature-string t)
+```
 
 ![example](example/example.png)
