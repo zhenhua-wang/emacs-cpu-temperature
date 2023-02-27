@@ -43,7 +43,7 @@
            1000)))
 
 ;;;###autoload
-(define-minor-mode display-cpu-temperature-mode
+(define-minor-mode cpu-temperature-mode
   "Toggle update of CPU temperature."
   :global t
   (if display-time-mode
