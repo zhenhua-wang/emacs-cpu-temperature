@@ -8,8 +8,17 @@
   "CPU thermal zone path."
   :type 'string)
 
+(defcustom cpu-temperature-update-interval 3
+  "CPU temperature updating interval in seconds."
+  :type 'natnum)
+
+(defvar cpu-temperature-current nil
+  "Current CPU temperature.")
+
 (defvar cpu-temperature--termal-zone nil
   "CPU thermal zone.")
+
+(defvar cpu-temperature--timer nil)
 
 (defun cpu-temperature-set-termal-zone ()
   "Set thermal zone based on CPU type."
@@ -26,14 +35,24 @@
 
 (defun cpu-temperature-termal-zone-temp ()
   "Get CPU temperature for the current thermal zone."
-  (/ (string-to-number (with-temp-buffer
-                         (insert-file-contents
-                          (concat cpu-temperature-termal-zone-path cpu-temperature--termal-zone "/temp"))
-                         (buffer-string)))
-     1000))
+  (setq cpu-temperature-current
+        (/ (string-to-number (with-temp-buffer
+                               (insert-file-contents
+                                (concat cpu-temperature-termal-zone-path cpu-temperature--termal-zone "/temp"))
+                               (buffer-string)))
+           1000)))
 
-;; initialize
-(cpu-temperature-set-termal-zone)
+;;;###autoload
+(define-minor-mode display-cpu-temperature-mode
+  "Toggle update of CPU temperature."
+  :global t
+  (if display-time-mode
+      (progn
+        (cpu-temperature-set-termal-zone)
+	(setq cpu-temperature--timer
+	      (run-at-time t cpu-temperature-update-interval
+			   'cpu-temperature-termal-zone-temp))
+	(cpu-temperature-termal-zone-temp))))
 
 (provide 'emacs-cpu-temperature)
 
