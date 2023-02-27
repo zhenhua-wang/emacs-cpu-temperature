@@ -12,8 +12,8 @@
   "CPU temperature updating interval in seconds."
   :type 'natnum)
 
-(defvar cpu-temperature-current nil
-  "Current CPU temperature.")
+(defvar cpu-temperature-string nil
+  "String that holds the current CPU temperature.")
 
 (defvar cpu-temperature--termal-zone nil
   "CPU thermal zone.")
@@ -35,12 +35,13 @@
 
 (defun cpu-temperature-termal-zone-temp ()
   "Get CPU temperature for the current thermal zone."
-  (setq cpu-temperature-current
-        (/ (string-to-number (with-temp-buffer
-                               (insert-file-contents
-                                (concat cpu-temperature-termal-zone-path cpu-temperature--termal-zone "/temp"))
-                               (buffer-string)))
-           1000)))
+  (setq cpu-temperature-string
+        (format "%d°C "
+                (/ (string-to-number (with-temp-buffer
+                                       (insert-file-contents
+                                        (concat cpu-temperature-termal-zone-path cpu-temperature--termal-zone "/temp"))
+                                       (buffer-string)))
+                   1000))))
 
 ;;;###autoload
 (define-minor-mode cpu-temperature-mode
