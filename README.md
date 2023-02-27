@@ -12,7 +12,9 @@ Currently, it only supports linux system
 ```
 
 # Usage
-I use this package to show CPU temperature on tab-bar. Here is an example. You can simply add this function to `tab-bar-format`. For more details, check [this](https://github.com/zhenhua-wang/emacs.d/blob/f7b174c414192392967c7499228f0a43ac0241d5/lisp/zw-exwm.el#L117-L133)
+To show it on mode-line or tab-bar, you can simple append the variable `cpu-temperature-string` to `global-mode-string`.
+
+Here is another example of a more customized tab-bar menu-item. You can simply add this function to `tab-bar-format`. For more details, check [this](https://github.com/zhenhua-wang/emacs.d/blob/f7b174c414192392967c7499228f0a43ac0241d5/lisp/zw-exwm.el#L117-L133)
 ```elisp
   (defun zw/tab-bar-format-cpu-temp ()
     "Produce menu that shows cpu temperature."
