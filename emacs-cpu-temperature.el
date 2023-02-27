@@ -18,6 +18,8 @@
 (defvar cpu-temperature--termal-zone nil
   "CPU thermal zone.")
 
+(defvar cpu-temperature--timer nil)
+
 (defun cpu-temperature-set-termal-zone ()
   "Set thermal zone based on CPU type."
   (let* ((termal-zones (seq-filter
@@ -49,8 +51,9 @@
       (progn
         (cpu-temperature-set-termal-zone)
         (cpu-temperature-update)
-        (run-at-time t cpu-temperature-update-interval
-		     'cpu-temperature-update))))
+        (setq cpu-temperature--timer (run-at-time t cpu-temperature-update-interval
+		                                  'cpu-temperature-update)))
+    (cancel-timer cpu-temperature--timer)))
 
 (provide 'emacs-cpu-temperature)
 
