@@ -18,13 +18,18 @@
                         (directory-files cpu-temperature-termal-zone-path))))
     (dolist (zone termal-zones)
       (when (string-match cpu-temperature-termal-zone-type
-                          (f-read-text (concat cpu-temperature-termal-zone-path
-                                               zone "/type")))
+                          (with-temp-buffer
+                            (insert-file-contents
+                             (concat cpu-temperature-termal-zone-path zone "/type"))
+                            (buffer-string)))
         (setq cpu-temperature--termal-zone zone)))))
 
 (defun cpu-temperature-termal-zone-temp ()
   "Get CPU temperature for the current thermal zone."
-  (/ (string-to-number (f-read-text (concat cpu-temperature-termal-zone-path cpu-temperature--termal-zone "/temp")))
+  (/ (string-to-number (with-temp-buffer
+                         (insert-file-contents
+                          (concat cpu-temperature-termal-zone-path cpu-temperature--termal-zone "/temp"))
+                         (buffer-string)))
      1000))
 
 ;; initialize
