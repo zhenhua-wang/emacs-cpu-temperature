@@ -24,14 +24,15 @@
   "Set thermal zone based on CPU type."
   (let* ((thermal-zones (seq-filter
                          (lambda (s) (string-match "thermal_zone" s))
-                         (when (file-exists-p cpu-temperature-thermal-zone-path)
+                         (ignore-errors
                            (directory-files cpu-temperature-thermal-zone-path)))))
     (dolist (zone thermal-zones)
       (when (string-match cpu-temperature-thermal-zone-type
                           (with-temp-buffer
-                            (insert-file-contents
-                             (concat cpu-temperature-thermal-zone-path zone "/type"))
-                            (buffer-string)))
+                            (ignore-errors
+                              (insert-file-contents
+                               (concat cpu-temperature-thermal-zone-path zone "/type"))
+                              (buffer-string))))
         (setq cpu-temperature--thermal-zone zone)))))
 
 (defun cpu-temperature-update ()
@@ -39,9 +40,10 @@
   (setq cpu-temperature-string
         (format "%d°C "
                 (/ (string-to-number (with-temp-buffer
-                                       (insert-file-contents
-                                        (concat cpu-temperature-thermal-zone-path cpu-temperature--thermal-zone "/temp"))
-                                       (buffer-string)))
+                                       (ignore-errors
+                                         (insert-file-contents
+                                          (concat cpu-temperature-thermal-zone-path cpu-temperature--thermal-zone "/temp"))
+                                         (buffer-string))))
                    1000))))
 
 ;;;###autoload
