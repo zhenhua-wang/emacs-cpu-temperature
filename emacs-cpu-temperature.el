@@ -38,13 +38,14 @@
 (defun cpu-temperature-update ()
   "Update CPU temperature for the current thermal zone."
   (setq cpu-temperature-string
-        (format "%d°C "
-                (/ (ignore-errors
-                     (string-to-number (with-temp-buffer
-                                         (insert-file-contents
-                                          (concat cpu-temperature-thermal-zone-path cpu-temperature--thermal-zone "/temp"))
-                                         (buffer-string))))
-                   1000))))
+        (or (ignore-errors
+              (format "%d°C "
+                      (/ (string-to-number (with-temp-buffer
+                                             (insert-file-contents
+                                              (concat cpu-temperature-thermal-zone-path cpu-temperature--thermal-zone "/temp"))
+                                             (buffer-string))))
+                      1000))
+            "")))
 
 ;;;###autoload
 (define-minor-mode cpu-temperature-mode
