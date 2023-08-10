@@ -24,7 +24,8 @@
   "Set thermal zone based on CPU type."
   (let* ((thermal-zones (seq-filter
                          (lambda (s) (string-match "thermal_zone" s))
-                         (directory-files cpu-temperature-thermal-zone-path))))
+                         (when (file-exists-p cpu-temperature-thermal-zone-path)
+                           (directory-files cpu-temperature-thermal-zone-path)))))
     (dolist (zone thermal-zones)
       (when (string-match cpu-temperature-thermal-zone-type
                           (with-temp-buffer
