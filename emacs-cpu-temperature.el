@@ -27,9 +27,9 @@
                          (ignore-errors
                            (directory-files cpu-temperature-thermal-zone-path)))))
     (dolist (zone thermal-zones)
-      (when (string-match cpu-temperature-thermal-zone-type
-                          (with-temp-buffer
-                            (ignore-errors
+      (when (ignore-errors
+              (string-match cpu-temperature-thermal-zone-type
+                            (with-temp-buffer
                               (insert-file-contents
                                (concat cpu-temperature-thermal-zone-path zone "/type"))
                               (buffer-string))))
@@ -39,8 +39,8 @@
   "Update CPU temperature for the current thermal zone."
   (setq cpu-temperature-string
         (format "%d°C "
-                (/ (string-to-number (with-temp-buffer
-                                       (ignore-errors
+                (/ (ignore-errors
+                     (string-to-number (with-temp-buffer
                                          (insert-file-contents
                                           (concat cpu-temperature-thermal-zone-path cpu-temperature--thermal-zone "/temp"))
                                          (buffer-string))))
