@@ -18,6 +18,9 @@
 (defvar cpu-temperature--thermal-zone nil
   "CPU thermal zone.")
 
+(defvar cpu-temperature--temp-path nil
+  "CPU thermal zone temperature.")
+
 (defvar cpu-temperature--timer nil)
 
 (defun cpu-temperature-set-thermal-zone ()
@@ -33,18 +36,20 @@
                               (insert-file-contents
                                (concat cpu-temperature-thermal-zone-path zone "/type"))
                               (buffer-string))))
-        (setq cpu-temperature--thermal-zone zone)))))
+        (setq cpu-temperature--thermal-zone zone
+              cpu-temperature--temp-path (concat cpu-temperature-thermal-zone-path
+                                                 cpu-temperature--thermal-zone "/temp"))))))
 
 (defun cpu-temperature-update ()
   "Update CPU temperature for the current thermal zone."
   (setq cpu-temperature-string
         (or (ignore-errors
               (format "%d°C "
-                      (/ (string-to-number (with-temp-buffer
-                                             (insert-file-contents
-                                              (concat cpu-temperature-thermal-zone-path cpu-temperature--thermal-zone "/temp"))
-                                             (buffer-string))))
-                      1000))
+                      (/ (string-to-number
+                          (with-temp-buffer
+                            (insert-file-contents cpu-temperature--temp-path)
+                            (buffer-string)))
+                         1000)))
             "")))
 
 ;;;###autoload
