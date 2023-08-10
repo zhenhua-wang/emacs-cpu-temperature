@@ -1,10 +1,10 @@
 ;;; emacs-cpu-temperature.el --- emacs cpu temperature  -*- lexical-binding: t; -*-
 
-(defcustom cpu-temperature-termal-zone-type "x86_pkg_temp"
+(defcustom cpu-temperature-thermal-zone-type "x86_pkg_temp"
   "CPU thermal zone type."
   :type 'string)
 
-(defcustom cpu-temperature-termal-zone-path "/sys/class/thermal/"
+(defcustom cpu-temperature-thermal-zone-path "/sys/class/thermal/"
   "CPU thermal zone path."
   :type 'string)
 
@@ -15,23 +15,23 @@
 (defvar cpu-temperature-string nil
   "String that holds the current CPU temperature.")
 
-(defvar cpu-temperature--termal-zone nil
+(defvar cpu-temperature--thermal-zone nil
   "CPU thermal zone.")
 
 (defvar cpu-temperature--timer nil)
 
-(defun cpu-temperature-set-termal-zone ()
+(defun cpu-temperature-set-thermal-zone ()
   "Set thermal zone based on CPU type."
-  (let* ((termal-zones (seq-filter
-                        (lambda (s) (string-match "thermal_zone" s))
-                        (directory-files cpu-temperature-termal-zone-path))))
-    (dolist (zone termal-zones)
-      (when (string-match cpu-temperature-termal-zone-type
+  (let* ((thermal-zones (seq-filter
+                         (lambda (s) (string-match "thermal_zone" s))
+                         (directory-files cpu-temperature-thermal-zone-path))))
+    (dolist (zone thermal-zones)
+      (when (string-match cpu-temperature-thermal-zone-type
                           (with-temp-buffer
                             (insert-file-contents
-                             (concat cpu-temperature-termal-zone-path zone "/type"))
+                             (concat cpu-temperature-thermal-zone-path zone "/type"))
                             (buffer-string)))
-        (setq cpu-temperature--termal-zone zone)))))
+        (setq cpu-temperature--thermal-zone zone)))))
 
 (defun cpu-temperature-update ()
   "Update CPU temperature for the current thermal zone."
@@ -39,7 +39,7 @@
         (format "%d°C "
                 (/ (string-to-number (with-temp-buffer
                                        (insert-file-contents
-                                        (concat cpu-temperature-termal-zone-path cpu-temperature--termal-zone "/temp"))
+                                        (concat cpu-temperature-thermal-zone-path cpu-temperature--thermal-zone "/temp"))
                                        (buffer-string)))
                    1000))))
 
@@ -49,7 +49,7 @@
   :global t
   (if cpu-temperature-mode
       (progn
-        (cpu-temperature-set-termal-zone)
+        (cpu-temperature-set-thermal-zone)
         (cpu-temperature-update)
         (setq cpu-temperature--timer (run-at-time t cpu-temperature-update-interval
 		                                  'cpu-temperature-update)))
