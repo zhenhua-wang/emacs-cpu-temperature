@@ -17,7 +17,7 @@
   :type 'natnum
   :group 'cpu-temperature)
 
-(defcustom cpu-temperature-method 'hwmon
+(defcustom cpu-temperature-method 'thermal-zone
   "Method to monitor CPU temperature.
 
 To change cpu-temperature-method, you also need to re-run `cpu-temperature-set-path' after change this variable."

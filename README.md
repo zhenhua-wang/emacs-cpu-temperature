@@ -6,8 +6,9 @@ Currently, it only supports linux system
   :straight (:host github :repo "zhenhua-wang/emacs-cpu-temperature")
   :init
   (setq cpu-temperature-update-interval 1
-        cpu-temperature-termal-zone-type "x86_pkg_temp"
-        cpu-temperature-termal-zone-path "/sys/class/thermal/")
+        cpu-temperature-method 'thermal-zone
+        cpu-temperature-thermal-zone-type "x86_pkg_temp"
+        cpu-temperature-thermal-zone-path "/sys/class/thermal/")
   :config
   (cpu-temperature-mode 1))
 ```
@@ -17,5 +18,7 @@ To show it on mode-line or tab-bar, you can simple append the variable `cpu-temp
 ```elisp
 (add-to-list 'global-mode-string 'cpu-temperature-string t)
 ```
+
+If you want to change config on the fly, make sure to re-run `(cpu-temperature-set-path)` to take effect.
 
 ![example](example/example.png)
