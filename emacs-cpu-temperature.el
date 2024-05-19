@@ -30,6 +30,11 @@
 
 (defvar cpu-temperature--timer nil)
 
+(defun cpu-temperature--read-file-content (file)
+  (with-temp-buffer
+    (insert-file-contents file)
+    (buffer-string)))
+
 (defun cpu-temperature-set-thermal-zone ()
   "Set thermal zone based on CPU type."
   (let* ((thermal-zones (seq-filter
@@ -39,10 +44,8 @@
     (dolist (zone thermal-zones)
       (when (ignore-errors
               (string-match cpu-temperature-thermal-zone-type
-                            (with-temp-buffer
-                              (insert-file-contents
-                               (concat cpu-temperature-thermal-zone-path zone "/type"))
-                              (buffer-string))))
+                            (cpu-temperature--read-file-content
+                             (concat cpu-temperature-thermal-zone-path zone "/type"))))
         (setq cpu-temperature--thermal-zone zone
               cpu-temperature--temp-path (concat cpu-temperature-thermal-zone-path
                                                  cpu-temperature--thermal-zone "/temp"))))))
@@ -53,9 +56,7 @@
         (or (ignore-errors
               (format "%d°C "
                       (/ (string-to-number
-                          (with-temp-buffer
-                            (insert-file-contents cpu-temperature--temp-path)
-                            (buffer-string)))
+                          (cpu-temperature--read-file-content cpu-temperature--temp-path))
                          1000)))
             "")))
 
