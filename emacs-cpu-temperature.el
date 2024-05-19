@@ -25,7 +25,7 @@ To change cpu-temperature-method, you also need to re-run `cpu-temperature-set-p
                  (const :tag "thermal zone" thermal-zone))
   :group 'cpu-temperature)
 
-(defcustom cpu-temperature-hwmon-type "CPU"
+(defcustom cpu-temperature-hwmon-type "Composite"
   "CPU hwmon type."
   :type 'string
   :group 'cpu-temperature-hwmon)

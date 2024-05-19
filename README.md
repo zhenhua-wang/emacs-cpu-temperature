@@ -13,6 +13,10 @@ Currently, it only supports linux system
   (cpu-temperature-mode 1))
 ```
 
+# Update
+## 2024-05-19 Add support for HWMON
+Reading temperature from HWMON is supported and the default temperature to monitor is `Composite`, which can be customized.
+
 # Usage
 To show it on mode-line or tab-bar, you can simple append the variable `cpu-temperature-string` to `global-mode-string`.
 ```elisp
