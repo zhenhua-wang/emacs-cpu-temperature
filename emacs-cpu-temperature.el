@@ -1,16 +1,23 @@
 ;;; emacs-cpu-temperature.el --- emacs cpu temperature  -*- lexical-binding: t; -*-
 
+(defgroup cpu-temperature nil
+  "cpu temperature group"
+  :group 'hardware)
+
 (defcustom cpu-temperature-thermal-zone-type "x86_pkg_temp"
   "CPU thermal zone type."
-  :type 'string)
+  :type 'string
+  :group 'cpu-temperature)
 
 (defcustom cpu-temperature-thermal-zone-path "/sys/class/thermal/"
   "CPU thermal zone path."
-  :type 'string)
+  :type 'string
+  :group 'cpu-temperature)
 
 (defcustom cpu-temperature-update-interval 3
   "CPU temperature updating interval in seconds."
-  :type 'natnum)
+  :type 'natnum
+  :group 'cpu-temperature)
 
 (defvar cpu-temperature-string nil
   "String that holds the current CPU temperature.")
